@@ -23,15 +23,15 @@ public class ToastWrapper extends Toast {
     this.toast = toast;
   }
 
-  public static ToastWrapper makeToast(Context context, CharSequence text, int duration){
-    Toast toast = makeToast(context, text, duration);
+  public static ToastWrapper makeText(Context context, CharSequence text, int duration){
+    Toast toast = Toast.makeText(context, text, duration);
     // hook为SafeToastContext
     setContextWrapper(toast.getView(), new SafeToastContext(context));
     return new ToastWrapper(context, toast);
   }
 
-  public static ToastWrapper makeToast(Context context, int resId, int duration){
-    return makeToast(context, context.getString(resId), duration);
+  public static ToastWrapper makeText(Context context, int resId, int duration){
+    return makeText(context, context.getString(resId), duration);
   }
 
   @Override

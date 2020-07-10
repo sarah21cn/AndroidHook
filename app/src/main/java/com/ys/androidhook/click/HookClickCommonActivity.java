@@ -14,9 +14,20 @@ public class HookClickCommonActivity extends AppCompatActivity {
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    hookClick(getParent().getWindow().getDecorView());
+
+    // 需要在View渲染完毕之后注入
+    getWindow().getDecorView().post(new Runnable() {
+      @Override
+      public void run() {
+        hookClick(getWindow().getDecorView());
+      }
+    });
   }
 
+  /**
+   * 递归注入
+   * @param rootView
+   */
   private void hookClick(View rootView){
     HookViewClickUtils.hookView(rootView);
     if (rootView instanceof ViewGroup){
