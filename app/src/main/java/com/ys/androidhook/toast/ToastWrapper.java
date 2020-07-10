@@ -11,6 +11,8 @@ import android.widget.Toast;
  * Created by yinshan on 2020/7/10.
  *
  * 装饰器模式
+ * 内部持有一个toast对象，所有操作都让toast对象去做
+ * 在toast对象中，hook View中的mContext，让其执行我们的新逻辑
  */
 public class ToastWrapper extends Toast {
 
@@ -23,6 +25,7 @@ public class ToastWrapper extends Toast {
 
   public static ToastWrapper makeToast(Context context, CharSequence text, int duration){
     Toast toast = makeToast(context, text, duration);
+    // hook为SafeToastContext
     setContextWrapper(toast.getView(), new SafeToastContext(context));
     return new ToastWrapper(context, toast);
   }
@@ -114,8 +117,14 @@ public class ToastWrapper extends Toast {
     return toast.getView();
   }
 
-
+  /**
+   * hook
+   * 将View中的mContext修改为传入的context（SafeToastContext）
+   * @param view
+   * @param context
+   */
   private static void setContextWrapper(View view, Context context){
+    // 目前只有25存在此问题，后续版本Android官方修复
     if (Build.VERSION.SDK_INT == 25){
       try{
         Field field = View.class.getDeclaredField("mContext");

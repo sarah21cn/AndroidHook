@@ -18,6 +18,7 @@ public class SafeToastContext extends ContextWrapper {
 
   @Override
   public Object getSystemService(String name) {
+    // 在getService时替换为WindowManagerWrapper
     if(Context.WINDOW_SERVICE.equals(name)){
       return new WindowManagerWrapper((WindowManager) getApplicationContext().getSystemService(name));
     }
@@ -56,6 +57,7 @@ public class SafeToastContext extends ContextWrapper {
 
     @Override
     public void addView(View view, ViewGroup.LayoutParams layoutParams){
+      // 在addview时增加try-catch，Android新版本的官方解法也是如此
       try{
         base.addView(view, layoutParams);
       }catch (WindowManager.BadTokenException e){
