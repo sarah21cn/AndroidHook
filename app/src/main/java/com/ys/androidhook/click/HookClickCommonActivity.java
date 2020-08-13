@@ -16,12 +16,7 @@ public class HookClickCommonActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
 
     // 需要在View渲染完毕之后注入
-    getWindow().getDecorView().post(new Runnable() {
-      @Override
-      public void run() {
-        hookClick(getWindow().getDecorView());
-      }
-    });
+    getWindow().getDecorView().post(() -> hookClick(getWindow().getDecorView()));
   }
 
   /**
