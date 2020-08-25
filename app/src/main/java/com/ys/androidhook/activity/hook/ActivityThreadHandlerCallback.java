@@ -29,8 +29,7 @@ public class ActivityThreadHandlerCallback implements Handler.Callback {
         handleLaunchActivity(msg);
         break;
     }
-    mBase.handleMessage(msg);
-    return true;
+    return false;
   }
 
 

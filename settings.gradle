@@ -1,2 +1,3 @@
 rootProject.name='AndroidHook'
 include ':app'
+include ':androidstub'
