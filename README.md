@@ -2,6 +2,7 @@
 ## 基本原理
 - 找到可以hook的点
 - 反射修改变量或调用方法
+- 动态代理
 
 ## 点击事件的Hook
 - 动态替换View.getListenerInfo中的mOnClickListener
