@@ -3,6 +3,7 @@ package com.ys.androidhook.activity.hook;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.ReflectPermission;
 
 import android.app.ActivityThread;
 import android.os.Build;
@@ -19,26 +20,8 @@ public class AMSHookHelper {
 
   public static final String EXTRA_TARGET_INTENT = "extra_target_intent";
 
-  public static void hookActivityManagerNativeSDK29() throws NoSuchFieldException,
-      ClassNotFoundException, IllegalAccessException, Reflector.ReflectedException {
-
-//    Class<?> activityTaskManagerClass = Class.forName("android.app.ActivityTaskManager");
-//    Field gDefaultField = activityTaskManagerClass.getDeclaredField("IActivityTaskManagerSingleton");
-//    gDefaultField.setAccessible(true);
-//
-//    // 获取单例对象
-//    Object gDefault = gDefaultField.get(null);
-//    Class<?> singleton = Class.forName("android.util.Singleton");
-//    Field instanceField = singleton.getDeclaredField("mInstance");
-//    instanceField.setAccessible(true);
-//
-//    // 为IActivityManager设置代理类
-//    Object rawIActivityTaskManager = instanceField.get(gDefault);
-//    Class<?> iActivityTaskManagerInterface = Class.forName("android.app.IActivityTaskManager");
-//    Object proxy = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-//        new Class<?>[] { iActivityTaskManagerInterface }, new IActivityManagerHandler(rawIActivityTaskManager));
-//    instanceField.set(gDefault, proxy);
-
+  @Deprecated
+  private static void hookActivityManagerNativeSDK29() throws ClassNotFoundException, Reflector.ReflectedException {
     Object singletonObj = Reflector.on("android.app.ActivityTaskManager").field("IActivityTaskManagerSingleton").get();
     Class<?> iActivityTaskManagerInterface = Class.forName("android.app.IActivityTaskManager");
     Object rawIActivityTaskManager = Reflector.with(singletonObj).field("mInstance").get();
@@ -47,7 +30,8 @@ public class AMSHookHelper {
     Reflector.with(singletonObj).field("mInstance").set(proxy);
   }
 
-  public static void hookActivityManagerNative() throws NoSuchFieldException,
+  @Deprecated
+  private static void hookActivityManagerNative() throws NoSuchFieldException,
       ClassNotFoundException, IllegalAccessException{
     // 获取IActivityManagerSingleton
     Field gDefaultField = null;
@@ -74,9 +58,26 @@ public class AMSHookHelper {
     instanceField.set(gDefault, proxy);
   }
 
+  public static void hookActivityManagerService() throws Reflector.ReflectedException{
+    Object gDefaultObj = null;
+    // API 29 及以后hook android.app.ActivityTaskManager.IActivityTaskManagerSingleton
+    // API 26 及以后hook android.app.ActivityManager.IActivityManagerSingleton
+    // API 25 以前hook android.app.ActivityManagerNative.gDefault
+    if(Build.VERSION.SDK_INT >= 29){
+      gDefaultObj = Reflector.on("android.app.ActivityTaskManager").field("IActivityTaskManagerSingleton").get();
+    }else if(Build.VERSION.SDK_INT >= 26){
+      gDefaultObj = Reflector.on("android.app.ActivityManager").field("IActivityManagerSingleton").get();
+    }else{
+      gDefaultObj = Reflector.on("android.app.ActivityManagerNative").field("gDefault").get();
+    }
+    Object amsObj = Reflector.with(gDefaultObj).field("mInstance").get();
+    Object proxy = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+        amsObj.getClass().getInterfaces(), new IActivityManagerHandler(amsObj));
+    Reflector.with(gDefaultObj).field("mInstance").set(proxy);
+  }
 
-  public static void hookActivityThreadCallback() throws NoSuchFieldException,
-      ClassNotFoundException, IllegalAccessException, Reflector.ReflectedException {
+
+  public static void hookActivityThreadCallback() throws Reflector.ReflectedException {
 //    Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
 //    Field currentActivityThreadField = activityThreadClass.getDeclaredField("sCurrentActivityThread");
 //    currentActivityThreadField.setAccessible(true);
@@ -96,16 +97,6 @@ public class AMSHookHelper {
     Reflector.with(handler).field("mCallback").set(new ActivityThreadHandlerCallback(handler));
   }
 
-  public static void hookActivityClientRecord(IBinder token) throws NoSuchFieldException,
-      ClassNotFoundException, IllegalAccessException{
-    Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
-    Field currentActivityThreadField = activityThreadClass.getDeclaredField("sCurrentActivityThread");
-    currentActivityThreadField.setAccessible(true);
-    Object currentActivityThread = currentActivityThreadField.get(null);
 
-    Field mActivitiesField = activityThreadClass.getDeclaredField("mActivities");
-    mActivitiesField.setAccessible(true);
-    // TODO: 2020/8/13 替换mActivities中的StubActivity
-  }
 
 }

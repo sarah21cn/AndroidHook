@@ -43,6 +43,7 @@ public class IActivityManagerHandler implements InvocationHandler {
       ComponentName componentName = new ComponentName(stubPackage, StubActivity.class.getName());
       newIntent.setComponent(componentName);
 
+      // 将之前的intent存起来
       newIntent.putExtra(AMSHookHelper.EXTRA_TARGET_INTENT, raw);
       args[index] = newIntent;
       Log.d(TAG, "hook succeed");
