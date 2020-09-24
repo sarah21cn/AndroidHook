@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="DCustomDrawable">
+    <attr name="d_solid_color" format="color"/>
+    <attr name="d_corners_radius" format="dimension"/>
+  </declare-styleable>
+
+</resources>

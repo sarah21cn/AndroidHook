@@ -3,6 +3,7 @@ package com.ys.androidhook.click;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -34,6 +35,29 @@ public class HookViewClickUtils {
     }catch (Exception e){
       e.printStackTrace();
     }
+  }
+
+  /**
+   * 跟随手指点击缩放
+   * @param view
+   */
+  public static void hookTouchListener(View view){
+    view.setOnTouchListener(new View.OnTouchListener() {
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()){
+          case MotionEvent.ACTION_DOWN:
+            view.setScaleX(0.95f);
+            view.setScaleY(0.95f);
+            break;
+          case MotionEvent.ACTION_UP:
+            view.setScaleX(1);
+            view.setScaleY(1);
+            break;
+        }
+        return false;
+      }
+    });
   }
 
 

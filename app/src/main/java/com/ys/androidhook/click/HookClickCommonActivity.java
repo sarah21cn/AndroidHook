@@ -31,6 +31,8 @@ public class HookClickCommonActivity extends AppCompatActivity {
         View child = ((ViewGroup) rootView).getChildAt(i);
         hookClick(child);
       }
+    }else{
+      HookViewClickUtils.hookTouchListener(rootView);
     }
   }
 }

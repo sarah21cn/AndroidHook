@@ -11,13 +11,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toTopOf="parent"
-    android:text="测试点击"/>
+    android:text="测试点击"
+    android:onClick="onClick"/>
 
   <Button
     android:id="@+id/activity_btn"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toBottomOf="@id/click_btn"
-    android:text="测试Activity"/>
+    android:text="测试Activity"
+    android:onClick="onClick"/>
+
+  <Button
+    android:id="@+id/background_btn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/activity_btn"
+    android:text="测试背景"
+    android:onClick="onClick"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
