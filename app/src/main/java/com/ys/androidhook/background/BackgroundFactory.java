@@ -16,6 +16,7 @@ import com.ys.androidhook.R;
  */
 public class BackgroundFactory implements LayoutInflater.Factory2 {
 
+  private LayoutInflater.Factory mViewCreateFactory;
   private LayoutInflater.Factory2 mViewCreateFactory2;
 
   @Nullable
@@ -29,14 +30,22 @@ public class BackgroundFactory implements LayoutInflater.Factory2 {
   @Override
   public View onCreateView(@NonNull String name, @NonNull Context context,
       @NonNull AttributeSet attrs) {
-    if(mViewCreateFactory2 == null){
-      return null;
+    View view = null;
+    if(mViewCreateFactory2 != null){
+      view = mViewCreateFactory2.onCreateView(name, context, attrs);
+      if(view == null){
+        view = mViewCreateFactory2.onCreateView(null, name, context, attrs);
+      }
+    }else if(mViewCreateFactory != null){
+      view = mViewCreateFactory.onCreateView(name, context, attrs);
     }
-    View view = mViewCreateFactory2.onCreateView(name, context, attrs);
     return setBackground(context, attrs, view);
   }
 
   private View setBackground(Context context, AttributeSet attrs, View view){
+    if(view == null){
+      return null;
+    }
     TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DCustomDrawable);
     int color = typedArray.getColor(R.styleable.DCustomDrawable_d_solid_color,
         context.getResources().getColor(android.R.color.transparent));
@@ -51,6 +60,9 @@ public class BackgroundFactory implements LayoutInflater.Factory2 {
     return view;
   }
 
+  public void setInterceptFactory(LayoutInflater.Factory factory){
+    this.mViewCreateFactory = factory;
+  }
 
   public void setInterceptFactory2(LayoutInflater.Factory2 factory2){
     this.mViewCreateFactory2 = factory2;

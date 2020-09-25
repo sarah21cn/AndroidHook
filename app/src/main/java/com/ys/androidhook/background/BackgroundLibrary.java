@@ -28,27 +28,21 @@ public class BackgroundLibrary {
     if (inflater == null) {
       return null;
     }
+    // TODO: 2020/9/25 AppCompatActivity生效 Activity不生效
     if (inflater.getFactory2() == null) {
-      BackgroundFactory factory = setDelegateFactory(context);
+      BackgroundFactory factory = setDelegateFactory(context, inflater);
       inflater.setFactory2(factory);
-    } else if (!(inflater.getFactory2() instanceof BackgroundFactory)) {
+    }else if (!(inflater.getFactory2() instanceof BackgroundFactory)) {
       forceSetFactory2(inflater);
     }
     return inflater;
   }
 
-  public static BackgroundFactory setDelegateFactory(Context context) {
+  public static BackgroundFactory setDelegateFactory(Context context, LayoutInflater inflater) {
     BackgroundFactory factory = new BackgroundFactory();
     if (context instanceof AppCompatActivity) {
       final AppCompatDelegate delegate = ((AppCompatActivity) context).getDelegate();
-      factory.setInterceptFactory2(new LayoutInflater.Factory2() {
-        @Nullable
-        @Override
-        public View onCreateView(@Nullable View parent, @NonNull String name,
-            @NonNull Context context, @NonNull AttributeSet attrs) {
-          return delegate.createView(parent, name, context, attrs);
-        }
-
+      factory.setInterceptFactory(new LayoutInflater.Factory() {
         @Nullable
         @Override
         public View onCreateView(@NonNull String name, @NonNull Context context,
