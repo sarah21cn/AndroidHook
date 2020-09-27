@@ -5,6 +5,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <TextView
+    android:id="@+id/text_1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:layout_constraintLeft_toLeftOf="parent"
@@ -14,5 +15,14 @@
     app:d_solid_color="@color/colorPrimary"
     app:d_corners_radius="10dp"
     android:text="测试文字"/>
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/text_1"
+    android:layout_marginTop="20dp"
+    android:text="测试文字2"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

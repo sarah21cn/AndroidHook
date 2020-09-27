@@ -28,7 +28,7 @@ public class BackgroundLibrary {
     if (inflater == null) {
       return null;
     }
-    // TODO: 2020/9/25 AppCompatActivity生效 Activity不生效
+    // AppCompatActivity生效，Activity使用createViewFromTag，反射调用constructor（借鉴自AppCompatActivity）
     if (inflater.getFactory2() == null) {
       BackgroundFactory factory = setDelegateFactory(context, inflater);
       inflater.setFactory2(factory);

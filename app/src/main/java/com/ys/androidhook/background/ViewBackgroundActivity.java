@@ -10,7 +10,7 @@ import com.ys.androidhook.R;
 /**
  * Created by yinshan on 2020/9/11.
  */
-public class ViewBackgroundActivity extends AppCompatActivity {
+public class ViewBackgroundActivity extends Activity {
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
