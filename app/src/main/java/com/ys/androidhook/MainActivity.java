@@ -14,6 +14,7 @@ import com.ys.androidhook.activity.TargetActivity;
 import com.ys.androidhook.activity.hook.AMSHookHelper;
 import com.ys.androidhook.background.ViewBackgroundActivity;
 import com.ys.androidhook.click.HookClickCommonActivity;
+import com.ys.androidhook.pkg.PackageActivity;
 import com.ys.androidhook.toast.ToastWrapper;
 
 public class MainActivity extends HookClickCommonActivity{
@@ -52,6 +53,10 @@ public class MainActivity extends HookClickCommonActivity{
         break;
       case R.id.background_btn:
         Intent intent = new Intent(this, ViewBackgroundActivity.class);
+        startActivity(intent);
+        break;
+      case R.id.package_btn:
+        intent = new Intent(this, PackageActivity.class);
         startActivity(intent);
         break;
     }

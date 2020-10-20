@@ -30,4 +30,12 @@
     android:text="测试背景"
     android:onClick="onClick"/>
 
+  <Button
+    android:id="@+id/package_btn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/background_btn"
+    android:text="测试package"
+    android:onClick="onClick"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
